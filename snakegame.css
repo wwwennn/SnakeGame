@@ -1,0 +1,26 @@
+.div1{
+	border:2px solid black;
+	width:500px;
+	height:400px;
+	position:absolute;
+	float:left;
+}
+
+.div2{
+	width:10px;
+	height:10px;
+	background-color:red;
+	margin-left:0px;
+	margin-top:0px;
+	position:absolute;
+	float:left;
+}
+
+.div3{
+	width:10px;
+	height:10px;
+	background-color:blue;
+	position:absolute;
+	left:300px;
+	top:250px;
+}

@@ -1,0 +1,266 @@
+<html>
+<head>
+<link rel="stylesheet" href="snakegame.css" type="text/css"/>
+<script>
+	var arrdiv=new Array();
+	arrdiv[0]=document.getElementById("id0");
+	
+	function createSnake(){
+		for(var i=1;i<10;i++){
+			arrdiv[i]=document.createElement("div");
+			bkDiv.appendChild(arrdiv[i]);
+			arrdiv[i].style.position="absolute";
+			arrdiv[i].style.float="left";
+			arrdiv[i].style.width="10px";
+			arrdiv[i].style.height="10px";
+			arrdiv[i].style.backgroundColor="red";
+			arrdiv[i].style.marginLeft=10*(i)+"px";
+			arrdiv[i].style.marginTop="0px";
+			arrdiv[i].id="id"+i;
+		}
+	}
+	
+	var flag=true;
+	
+	function Snake(direct){
+		this.direct=direct;
+		
+		var mySnake=new Array();
+			var snakeLeft=new Array();
+			var snakeTop=new Array();
+			var sLeft=new Array();
+			var sTop=new Array();
+		
+		this.move=function(candy){
+			
+			var lindex=arrdiv.length-1;
+			var lindex2=lindex;
+		
+			for(var i=0;i<arrdiv.length;i++){
+				mySnake[i]=document.getElementById("id"+i);
+				snakeLeft[i]=mySnake[i].style.marginLeft;
+				snakeTop[i]=mySnake[i].style.marginTop;
+				sLeft[i]=snakeLeft[i].substr(0,snakeLeft[i].length-2);
+				sTop[i]=snakeTop[i].substr(0,snakeTop[i].length-2);
+				sLeft[i]=parseInt(sLeft[i]);
+				sTop[i]=parseInt(sTop[i]);
+			}
+			
+			switch(this.direct){
+				//蛇头运动的方向 0:上 1:右 2:下 3:左
+				case 0:
+					//window.alert("向上");
+					sTop[lindex]-=10;
+					this.direct=0;
+					break;
+				case 1:
+					//window.alert("向右");
+					sLeft[lindex]+=10;
+					this.direct=1;
+					break;
+				case 2:
+					//window.alert("向下");
+					sTop[lindex]+=10;
+					this.direct=2;
+					break;
+				case 3:
+					//window.alert("向左");
+					sLeft[lindex]-=10;
+					this.direct=3;
+					break;
+			}
+			
+			if(sLeft[lindex]==candy.x&&sTop[lindex]==candy.y){
+				//window.alert(newS);
+				newS.style.backgroundColor="red";
+				var nsleft=newS.style.marginLeft;
+				var nstop=newS.style.marginTop;
+				var nsleft1=nsleft.substr(0,newS.style.marginLeft.length-2);
+				var nstop1=nstop.substr(0,newS.style.marginTop.length-2);
+				nsleft1=parseInt(nsleft1);
+				nstop1=parseInt(nstop1);
+				switch(this.direct){
+					case 0:
+						//window.alert("向上");
+						nstop1-=10;
+						break;
+					case 1:
+						//window.alert("向右");
+						nsleft1+=10;
+						break;
+					case 2:
+						//window.alert("向下");
+						nstop1+=10;
+						break;
+					case 3:
+						//window.alert("向左");
+						nsleft1-=10;
+						break;
+				}
+				
+				newS.style.marginLeft=nsleft1+"px";
+				newS.style.marginTop=nstop1+"px";
+				newS.id="id"+arrdiv.length;
+				arrdiv.push(newS);
+				mySnake.push(newS);
+				lindex2++;
+				candy1=new Candy();
+				newS=candy1.createCandy();
+			}
+			
+			for(var i=0;i<arrdiv.length-1;i++){
+				mySnake[i].style.marginLeft=mySnake[i+1].style.marginLeft;
+				mySnake[i].style.marginTop=mySnake[i+1].style.marginTop;
+			}
+			
+			mySnake[lindex].style.marginLeft=sLeft[lindex];
+			mySnake[lindex].style.marginTop=sTop[lindex];
+			
+			if((mySnake[lindex2].style.marginLeft=="490px"&&this.direct==1)||
+			(mySnake[lindex2].style.marginTop=="390px"&&this.direct==2)||
+			(mySnake[lindex2].style.marginLeft=="0px"&&this.direct==3)||
+			(mySnake[lindex2].style.marginTop=="0px"&&this.direct==0)){
+				clearInterval(idsetin);
+				window.alert("Game Over!");
+			}
+		}
+		
+		this.changeDirect=function(e){
+			for(var i=0;i<arrdiv.length;i++){
+				mySnake[i]=document.getElementById("id"+i);
+				snakeLeft[i]=mySnake[i].style.marginLeft;
+				snakeTop[i]=mySnake[i].style.marginTop;
+				sLeft[i]=snakeLeft[i].substr(0,snakeLeft[i].length-2);
+				sTop[i]=snakeTop[i].substr(0,snakeTop[i].length-2);
+				sLeft[i]=parseInt(sLeft[i]);
+				sTop[i]=parseInt(sTop[i]);
+			}
+		
+			var lindex=arrdiv.length-1;
+		
+			switch(e.keyCode){
+				//蛇头运动的方向 0:上 1:右 2:下 3:左
+				case 38:
+					//window.alert("向上");
+					if(this.direct==0||this.direct==1||this.direct==3){
+						sTop[lindex]-=10;
+						this.direct=0;
+					}
+					break;
+				case 39:
+					//window.alert("向右");
+					if(this.direct==0||this.direct==1||this.direct==2){
+						sLeft[lindex]+=10;
+						this.direct=1;
+					}
+					break;
+				case 40:
+					//window.alert("向下");
+					if(this.direct==1||this.direct==2||this.direct==3){
+						sTop[lindex]+=10;
+						this.direct=2;
+					}
+					break;
+				case 37:
+					//window.alert("向左");
+					if(this.direct==0||this.direct==2||this.direct==3){
+						sLeft[lindex]-=10;
+						this.direct=3;
+					}
+					break;
+				case 32:
+					if(flag){
+						clearInterval(idsetin);
+						flag=false;
+					}else{
+						idsetin=setInterval("snake1.move()",100);
+						flag=true;
+					}
+					break;
+			}
+		
+			for(var i=0;i<arrdiv.length-1;i++){
+				mySnake[i].style.marginLeft=mySnake[i+1].style.marginLeft;
+				mySnake[i].style.marginTop=mySnake[i+1].style.marginTop;
+			}
+		
+			mySnake[lindex].style.marginLeft=sLeft[lindex];
+			mySnake[lindex].style.marginTop=sTop[lindex];
+		}
+		/*
+		this.eatCandy=function(candy){
+			var mySnake=new Array();
+			var snakeLeft=new Array();
+			var snakeTop=new Array();
+			var sLeft=new Array();
+			var sTop=new Array();
+		
+			for(var i=0;i<arrdiv.length;i++){
+				mySnake[i]=document.getElementById("id"+i);
+				snakeLeft[i]=mySnake[i].style.marginLeft;
+				snakeTop[i]=mySnake[i].style.marginTop;
+				sLeft[i]=snakeLeft[i].substr(0,snakeLeft[i].length-2);
+				sTop[i]=snakeTop[i].substr(0,snakeTop[i].length-2);
+				sLeft[i]=parseInt(sLeft[i]);
+				sTop[i]=parseInt(sTop[i]);
+			}
+		
+			var lindex=arrdiv.length-1;
+			
+			if(sLeft[lindex]==candy.x&&sTop[lindex]==candy.y){
+			
+				delete candy;
+				candy1=new Candy();
+				candy1.createCandy();
+				
+				window.alert(sLeft[lindex]+" "+sTop[lindex]);
+				window.alert(candy.x+" "+candy.y);
+			}
+			
+			
+		}
+		*/
+	}
+	
+	
+	function Candy(){
+		this.x=Math.round(Math.random()*49)*10;
+		this.y=Math.round(Math.random()*39)*10;
+		
+		this.createCandy=function(){
+			var bkDiv=document.getElementById("bkdiv");
+			var myCandy=document.createElement("div");
+			bkDiv.appendChild(myCandy);
+			myCandy.style.width="10px";
+			myCandy.style.height="10px";
+			myCandy.style.backgroundColor="blue";
+			myCandy.style.marginLeft=this.x+"px";
+			myCandy.style.marginTop=this.y+"px";
+			myCandy.style.position="absolute";
+			myCandy.style.float="left";
+			return myCandy;
+		}
+		
+	}
+	
+	
+	
+	
+	var snake1=new Snake(1);
+	var idsetin=setInterval("snake1.move(candy1)",100);
+</script>
+</head>
+<body onkeydown="snake1.changeDirect(event)">
+<div class="div1" id="bkdiv">
+<div id="id0" style="width:10px;height:10px;background-color:red;margin-left:0px;margin-top:0px;position:absolute;float:left"></div>
+
+</div>
+
+<script language="javascript">
+var bkDiv=document.getElementById("bkdiv");
+createSnake();
+var candy1=new Candy();
+var newS=candy1.createCandy();
+</script>
+</body>
+</html>
